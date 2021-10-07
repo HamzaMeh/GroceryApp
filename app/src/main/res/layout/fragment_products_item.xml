@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_200sdp"
+        android:minHeight="?listPreferredItemHeightLarge"
+        app:strokeColor="@color/black"
+        app:strokeWidth="@dimen/_1sdp"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minHeight="?listPreferredItemHeightLarge">
+
+            <ImageView
+                android:id="@+id/ProductImage"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textView_price"
+                android:background="@drawable/ic_baseline_category_24" />
+
+            <TextView
+                android:id="@+id/textView_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_12sdp"
+                android:paddingStart="8dp"
+                android:layout_margin="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textView_productTitle"
+                android:text="PKR 250" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rateStar"
+                android:layout_marginBottom="4dp"
+
+                android:background="@drawable/ic_baseline_star_rate_24"
+                app:layout_constraintEnd_toEndOf="@id/ProductImage"
+                app:layout_constraintBottom_toTopOf="@id/textView_productTitle" />
+
+            <TextView
+                android:id="@+id/textView_rating"
+                android:text="2.5"
+                android:textSize="@dimen/_12sdp"
+                android:layout_margin="4dp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/rateStar"
+                app:layout_constraintBottom_toTopOf="@id/textView_productTitle" />
+
+            <TextView
+                android:id="@+id/textView_productTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/ProductImage"
+                app:layout_constraintStart_toStartOf="@id/ProductImage" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
