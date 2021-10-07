@@ -11,5 +11,5 @@ interface GroceryRepository {
 
     suspend fun getAllCategories(): LiveData<List<Category>>
 
-    suspend fun getCategoryProducts(category:String): List<Product>
+    suspend fun getCategoryProducts(category:String): LiveData<List<Product>>
 }

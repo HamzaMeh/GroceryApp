@@ -66,8 +66,9 @@ class HomeFragment : ScopeFragment() {
 
         val adapter= CategoriesAdapter()
         adapter.submitList(items)
-        binding.categoryRecycler.adapter=adapter
         binding.categoryRecycler.layoutManager= GridLayoutManager(context,1, GridLayoutManager.HORIZONTAL,false)
+
+        binding.categoryRecycler.adapter=adapter
 
 
     }
@@ -75,10 +76,10 @@ class HomeFragment : ScopeFragment() {
     {
         val adapter= ProductsAdapter()
         adapter.submitList(items)
+        binding.productRecycler.layoutManager=GridLayoutManager(context,3)
         binding.productRecycler.adapter=adapter
 
-        binding.productRecycler.layoutManager=
-            GridLayoutManager(context,2, GridLayoutManager.HORIZONTAL,false)
+
 
     }
 

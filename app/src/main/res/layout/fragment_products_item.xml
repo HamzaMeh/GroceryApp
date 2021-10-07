@@ -30,7 +30,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/textView_price"
-                android:background="@drawable/ic_baseline_category_24" />
+                android:src="@drawable/ic_baseline_category_24" />
+            <TextView
+                android:id="@+id/currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/design_default_color_error"
+                android:textStyle="bold"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="8dp"
+                android:text="$"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textView_productTitle"/>
 
             <TextView
                 android:id="@+id/textView_price"
@@ -39,11 +51,10 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="@dimen/_12sdp"
-                android:paddingStart="8dp"
-                android:layout_margin="4dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintStart_toEndOf="@id/currency"
                 app:layout_constraintBottom_toTopOf="@id/textView_productTitle"
-                android:text="PKR 250" />
+                android:text="250" />
 
             <ImageView
                 android:layout_width="wrap_content"

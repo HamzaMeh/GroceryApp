@@ -27,14 +27,11 @@ class GroceryRepositoryImpl(
                 newFetchedCategory.map { it->
                     persistFetchedCategories(it)
                 }
-                /*if(categoryList.isEmpty()) {
-                    categoryList.addAll(newFetchedCategory)
-                    Log.e("Message Sequence","Added ")
-
-                }*/
             }
             downloadAllProducts.observeForever(){newFetchedProduct->
-                //persistFetchedProducts(newFetchedProduct)
+                newFetchedProduct.map { it->
+                    persistFetchedProducts(it)
+                }
             }
         }
     }
@@ -44,7 +41,7 @@ class GroceryRepositoryImpl(
 
         return withContext(Dispatchers.IO){
            fetchProducts()
-            return@withContext networkDataSource.downloadAllProducts
+            return@withContext productsDao.getAllProducts()
         }
     }
 
@@ -53,11 +50,11 @@ class GroceryRepositoryImpl(
 
         return withContext(Dispatchers.IO) {
             fetchCategories()
-            return@withContext networkDataSource.downloadAllCategories
+            return@withContext categoriesDao.getAllCategories()
         }
     }
 
-    override suspend fun getCategoryProducts(category:String): List<Product> {
+    override suspend fun getCategoryProducts(category:String): LiveData<List<Product>> {
 
         return withContext(Dispatchers.IO){
          //   initGrocery()

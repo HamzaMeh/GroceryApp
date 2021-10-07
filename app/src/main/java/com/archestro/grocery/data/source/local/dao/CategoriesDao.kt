@@ -14,5 +14,5 @@ interface CategoriesDao {
     fun upsert(category:Category)
 
     @Query("select * from categories")
-    fun getAllCategories(): List<Category>
+    fun getAllCategories(): LiveData<List<Category>>
 }

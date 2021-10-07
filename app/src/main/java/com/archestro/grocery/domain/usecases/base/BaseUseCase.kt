@@ -26,8 +26,6 @@ abstract class BaseUseCase<Response>(private val apiErrorHandle: ApiErrorHandle?
         paramter: Any?
     ): MutableLiveData<Outcome<List<Response>>> {
         val resultLiveData = MutableLiveData<Outcome<List<Response>>>()
-
-
         val backgroundJob = scope.async {
             run(paramter)
         }

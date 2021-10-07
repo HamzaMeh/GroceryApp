@@ -11,6 +11,7 @@ import com.archestro.grocery.data.source.remote.NetworkDataSourceImpl
 import com.archestro.grocery.domain.repository.GroceryRepository
 import com.archestro.grocery.domain.usecases.allProductsUseCase.GetAllProductsUseCase
 import com.archestro.grocery.domain.usecases.categoriesUseCase.GetCategoriesUseCase
+import com.archestro.grocery.domain.usecases.categoryProductsUseCase.GetCategoryProductsUseCase
 import com.archestro.grocery.presentation.home.HomeViewModel
 import com.archestro.grocery.util.AppUtils
 import com.archestro.grocery.util.AppUtils.context
@@ -24,7 +25,7 @@ val appModule= module {
 
     single { createApiErrorHandle() }
 
-    single { GroceryDatabase.getInstance(context = AppUtils.context) }
+    single { GroceryDatabase.getInstance(context = context) }
 
     single { get<GroceryDatabase>().productsDao() }
 
@@ -35,6 +36,8 @@ val appModule= module {
     single { createAllProductsUseCase(get(), get()) }
 
     single { createCategoriesUseCase(get(), get()) }
+
+    single { createCategoryProductsUseCase(get(),get()) }
 
 
     viewModel {
@@ -69,6 +72,12 @@ fun createAllProductsUseCase(
     return GetAllProductsUseCase(groceryRepository,apiErrorHandle)
 }
 
+fun createCategoryProductsUseCase(
+    groceryRepository: GroceryRepository,
+    apiErrorHandle: ApiErrorHandle
+):GetCategoryProductsUseCase{
+    return GetCategoryProductsUseCase(groceryRepository,apiErrorHandle)
+}
 fun createApiErrorHandle():ApiErrorHandle{
     return ApiErrorHandle()
 }

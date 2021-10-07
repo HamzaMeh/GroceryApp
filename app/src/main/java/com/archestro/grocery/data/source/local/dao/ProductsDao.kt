@@ -14,10 +14,10 @@ interface ProductsDao {
     fun upsert(product: Product)
 
     @Query("select * from products")
-    fun getAllProducts(): List<Product>
+    fun getAllProducts(): LiveData<List<Product>>
 
     @Query("select * from products where category= :categoryToGet ")
-    fun getCategoryProducts(categoryToGet:String): List<Product>
+    fun getCategoryProducts(categoryToGet:String): LiveData<List<Product>>
 
 
 }
