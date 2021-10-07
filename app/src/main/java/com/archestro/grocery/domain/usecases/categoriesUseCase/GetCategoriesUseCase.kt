@@ -11,7 +11,7 @@ class GetCategoriesUseCase(
     apiErrorHandle: ApiErrorHandle
 ) : BaseUseCase<Category>(apiErrorHandle){
 
-    override suspend fun run(parm:Any?): List<Category> {
+    override suspend fun run(parm:Any?): LiveData<List<Category>> {
         return repository.getAllCategories()
     }
 }

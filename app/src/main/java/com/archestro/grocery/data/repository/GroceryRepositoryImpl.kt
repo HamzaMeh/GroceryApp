@@ -24,35 +24,36 @@ class GroceryRepositoryImpl(
         networkDataSource.apply {
 
             downloadAllCategories.observeForever{newFetchedCategory->
+                newFetchedCategory.map { it->
+                    persistFetchedCategories(it)
+                }
                 /*if(categoryList.isEmpty()) {
                     categoryList.addAll(newFetchedCategory)
                     Log.e("Message Sequence","Added ")
-                    newFetchedCategory.map { it->
-                        persistFetchedCategories(it)
-                    }
 
                 }*/
             }
             downloadAllProducts.observeForever(){newFetchedProduct->
-                persistFetchedProducts(newFetchedProduct)
+                //persistFetchedProducts(newFetchedProduct)
             }
         }
     }
 
 
-    override suspend fun getAllProducts():List<Product> {
+    override suspend fun getAllProducts():LiveData<List<Product>> {
 
         return withContext(Dispatchers.IO){
-           // initGrocery()
-            return@withContext productsDao.getAllProducts()
+           fetchProducts()
+            return@withContext networkDataSource.downloadAllProducts
         }
     }
 
-    override suspend fun getAllCategories(): List<Category> {
+    override suspend fun getAllCategories(): LiveData<List<Category>> {
 
 
         return withContext(Dispatchers.IO) {
-            return@withContext getCategory()
+            fetchCategories()
+            return@withContext networkDataSource.downloadAllCategories
         }
     }
 

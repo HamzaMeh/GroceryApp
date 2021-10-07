@@ -7,9 +7,9 @@ import com.archestro.grocery.data.source.remote.model.response.product.Product
 
 interface GroceryRepository {
 
-    suspend fun getAllProducts(): List<Product>
+    suspend fun getAllProducts(): LiveData<List<Product>>
 
-    suspend fun getAllCategories(): List<Category>
+    suspend fun getAllCategories(): LiveData<List<Category>>
 
     suspend fun getCategoryProducts(category:String): List<Product>
 }

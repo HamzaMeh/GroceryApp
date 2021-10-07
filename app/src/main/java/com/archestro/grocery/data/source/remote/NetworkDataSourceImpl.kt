@@ -11,11 +11,11 @@ import java.lang.Exception
 class NetworkDataSourceImpl(private val apiService: ApiService) : NetworkDataSource {
 
     private val _downloadedAllCategories= MutableLiveData<List<Category>>()
-    private val _downloadedAllProducts= MutableLiveData<Product> ()
+    private val _downloadedAllProducts= MutableLiveData<List<Product>> ()
 
     override val downloadAllCategories: LiveData<List<Category>>
         get() = _downloadedAllCategories
-    override val downloadAllProducts: LiveData<Product>
+    override val downloadAllProducts: LiveData<List<Product>>
         get() = _downloadedAllProducts
 
     override suspend fun fetchAllCategories() {
@@ -36,9 +36,8 @@ class NetworkDataSourceImpl(private val apiService: ApiService) : NetworkDataSou
         try {
             val fetchedProducts=apiService
                 .getProducts()
-            fetchedProducts.map { product->
-                _downloadedAllProducts.postValue(product)
-            }
+            _downloadedAllProducts.postValue(fetchedProducts)
+
         }catch (e: Exception)
         {
             e.printStackTrace()

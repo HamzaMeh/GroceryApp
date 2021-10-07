@@ -52,13 +52,13 @@ class HomeFragment : ScopeFragment() {
             binding.groupLoading.visibility= View.GONE
             categoriesList.value?.let { initCategoryRecyclerView(it) }
         })
-       /* val productsList=homeViewModel.productLiveData()
+        val productsList=homeViewModel.productLiveData()
         productsList?.observe(viewLifecycleOwner, Observer { entries->
             if(entries==null) return@Observer
 
             binding.groupLoading.visibility= View.GONE
             productsList.value?.let { initProductsRecyclerView(it) }
-        })*/
+        })
     }
 
     private fun initCategoryRecyclerView(items: List<Category>)
@@ -74,11 +74,12 @@ class HomeFragment : ScopeFragment() {
     private fun initProductsRecyclerView(items: List<Product>)
     {
         val adapter= ProductsAdapter()
-
+        adapter.submitList(items)
         binding.productRecycler.adapter=adapter
+
         binding.productRecycler.layoutManager=
             GridLayoutManager(context,2, GridLayoutManager.HORIZONTAL,false)
-        adapter.submitList(items)
+
     }
 
     override fun onDestroyView() {

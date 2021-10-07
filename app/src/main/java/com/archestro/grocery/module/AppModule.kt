@@ -11,7 +11,6 @@ import com.archestro.grocery.data.source.remote.NetworkDataSourceImpl
 import com.archestro.grocery.domain.repository.GroceryRepository
 import com.archestro.grocery.domain.usecases.allProductsUseCase.GetAllProductsUseCase
 import com.archestro.grocery.domain.usecases.categoriesUseCase.GetCategoriesUseCase
-import com.archestro.grocery.domain.usecases.cateogryProductsUseCase.GetCategoryProductsUseCase
 import com.archestro.grocery.presentation.home.HomeViewModel
 import com.archestro.grocery.util.AppUtils
 import com.archestro.grocery.util.AppUtils.context
@@ -37,10 +36,9 @@ val appModule= module {
 
     single { createCategoriesUseCase(get(), get()) }
 
-    single { createCategoryProductsUseCase(get(),get())}
 
     viewModel {
-        HomeViewModel(get())
+        HomeViewModel(get(),get())
     }
 }
 fun createRepository(
@@ -55,12 +53,7 @@ fun createNetworkDataSource(apiService: ApiService):NetworkDataSource{
     return NetworkDataSourceImpl(apiService)
 }
 
-fun createCategoryProductsUseCase(
-    groceryRepository: GroceryRepository,
-    apiErrorHandle: ApiErrorHandle
-): GetCategoryProductsUseCase {
-    return GetCategoryProductsUseCase(groceryRepository,apiErrorHandle)
-}
+
 
 fun createCategoriesUseCase(
     groceryRepository: GroceryRepository,

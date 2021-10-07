@@ -7,7 +7,7 @@ import com.archestro.grocery.data.source.remote.model.response.product.Product
 interface NetworkDataSource {
 
     val downloadAllCategories: LiveData<List<Category>>
-    val downloadAllProducts: LiveData<Product>
+    val downloadAllProducts: LiveData<List<Product>>
 
     suspend fun fetchAllCategories()
 

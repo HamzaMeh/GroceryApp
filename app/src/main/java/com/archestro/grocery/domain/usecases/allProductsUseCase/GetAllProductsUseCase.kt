@@ -12,7 +12,7 @@ class GetAllProductsUseCase(
 ): BaseUseCase<Product>(apiErrorHandle) {
 
 
-    override  suspend fun run(parm: Any?): List<Product> {
+    override  suspend fun run(parm: Any?): LiveData<List<Product>> {
         return repository.getAllProducts()
     }
 }

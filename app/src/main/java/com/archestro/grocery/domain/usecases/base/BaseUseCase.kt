@@ -17,7 +17,7 @@ import java.net.UnknownHostException
 
 abstract class BaseUseCase<Response>(private val apiErrorHandle: ApiErrorHandle? = null) where Response : Any {
 
-    abstract suspend fun run(paramter: Any?): List<Response>
+    abstract suspend fun run(paramter: Any?): LiveData<List<Response>>
 
     open fun invoke(
         showLoader: Boolean = true,
