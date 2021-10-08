@@ -12,7 +12,10 @@ import com.archestro.grocery.domain.repository.GroceryRepository
 import com.archestro.grocery.domain.usecases.allProductsUseCase.GetAllProductsUseCase
 import com.archestro.grocery.domain.usecases.categoriesUseCase.GetCategoriesUseCase
 import com.archestro.grocery.domain.usecases.categoryProductsUseCase.GetCategoryProductsUseCase
+import com.archestro.grocery.domain.usecases.productDetailUseCase.GetProductDetailUseCase
+import com.archestro.grocery.presentation.categoryProducts.CategoryViewModel
 import com.archestro.grocery.presentation.home.HomeViewModel
+import com.archestro.grocery.presentation.productDetail.ProductDetailViewModel
 import com.archestro.grocery.util.AppUtils
 import com.archestro.grocery.util.AppUtils.context
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -39,9 +42,18 @@ val appModule= module {
 
     single { createCategoryProductsUseCase(get(),get()) }
 
+    single { createProductDetailUseCase(get(),get()) }
 
     viewModel {
         HomeViewModel(get(),get())
+    }
+
+    viewModel {
+            parameters -> CategoryViewModel(_category = parameters.get<String>() as String,get())
+    }
+
+    viewModel {
+        parameters-> ProductDetailViewModel(productId = parameters.get<Int>() as Int,get())
     }
 }
 fun createRepository(
@@ -77,6 +89,13 @@ fun createCategoryProductsUseCase(
     apiErrorHandle: ApiErrorHandle
 ):GetCategoryProductsUseCase{
     return GetCategoryProductsUseCase(groceryRepository,apiErrorHandle)
+}
+
+fun createProductDetailUseCase(
+    groceryRepository: GroceryRepository,
+    apiErrorHandle: ApiErrorHandle
+):GetProductDetailUseCase{
+    return GetProductDetailUseCase(groceryRepository,apiErrorHandle)
 }
 fun createApiErrorHandle():ApiErrorHandle{
     return ApiErrorHandle()

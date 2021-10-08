@@ -1,56 +1,55 @@
-package com.archestro.grocery.presentation.home
+package com.archestro.grocery.presentation.categoryProducts
 
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.archestro.grocery.R
 import com.archestro.grocery.base.BaseViewModel
 import com.archestro.grocery.base.ScopeFragment
-import com.archestro.grocery.data.source.remote.model.response.category.Category
 import com.archestro.grocery.data.source.remote.model.response.product.Product
-import com.archestro.grocery.databinding.HomeFragmentBinding
-import com.archestro.grocery.presentation.home.Adapter.Categories.CategoriesAdapter
+import com.archestro.grocery.databinding.CategoryFragmentBinding
 import com.archestro.grocery.presentation.home.Adapter.Product.ProductsAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class HomeFragment : ScopeFragment() {
+class CategoryFragment : ScopeFragment() {
 
-    private val homeViewModel:HomeViewModel by viewModel()
-    private var _binding: HomeFragmentBinding? = null
-    private val binding get() = _binding!!
 
+    private val viewModel:CategoryViewModel by inject {(parametersOf(args.category))}
+
+    private var _binding:CategoryFragmentBinding?=null
+    private val binding get()=_binding!!
+
+    private val args by navArgs<CategoryFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding=  HomeFragmentBinding.inflate(inflater,container,false)
+        _binding= CategoryFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as? AppCompatActivity)?.supportActionBar?.title=getString(R.string.Home)
-
+        (activity as? AppCompatActivity)?.supportActionBar?.title="Products"
         bindUI()
-
     }
 
-    private fun bindUI()=launch(Dispatchers.Main) {
-        val categoriesList=homeViewModel.categoryLiveData()
-        categoriesList?.observe(viewLifecycleOwner, Observer { entries->
-            if(entries==null) return@Observer
+    private fun bindUI()=launch(Dispatchers.Main){
 
-            binding.groupLoading.visibility= View.GONE
-            categoriesList.value?.let { initCategoryRecyclerView(it) }
-        })
-        val productsList=homeViewModel.productLiveData()
+        binding.textViewCategoryName.text=args.category
+        val productsList=viewModel.categoryProductLiveData()
         productsList?.observe(viewLifecycleOwner, Observer { entries->
             if(entries==null) return@Observer
 
@@ -59,23 +58,12 @@ class HomeFragment : ScopeFragment() {
         })
     }
 
-    private fun initCategoryRecyclerView(items: List<Category>)
-    {
-
-        val adapter= CategoriesAdapter()
-        adapter.submitList(items)
-        binding.categoryRecycler.layoutManager= GridLayoutManager(context,1, GridLayoutManager.HORIZONTAL,false)
-
-        binding.categoryRecycler.adapter=adapter
-
-
-    }
     private fun initProductsRecyclerView(items: List<Product>)
     {
         val adapter= ProductsAdapter()
         adapter.submitList(items)
-        binding.productRecycler.layoutManager=GridLayoutManager(context,3)
-        binding.productRecycler.adapter=adapter
+        binding.categoryProductRecycler.layoutManager= GridLayoutManager(context,3)
+        binding.categoryProductRecycler.adapter=adapter
 
     }
 
@@ -83,8 +71,9 @@ class HomeFragment : ScopeFragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun getViewModel(): BaseViewModel? {
-        return homeViewModel
+        return viewModel
     }
 
 }

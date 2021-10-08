@@ -1,6 +1,5 @@
 package com.archestro.grocery.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.archestro.grocery.data.source.local.dao.CategoriesDao
 import com.archestro.grocery.data.source.local.dao.ProductsDao
@@ -59,6 +58,13 @@ class GroceryRepositoryImpl(
         return withContext(Dispatchers.IO){
          //   initGrocery()
             return@withContext productsDao.getCategoryProducts(category)
+        }
+    }
+
+    override suspend fun getProductDetail(productID:Int):LiveData<List<Product>>{
+        val result=productsDao.getProductDetail(productID)
+        return withContext(Dispatchers.IO){
+            return@withContext productsDao.getProductDetail(productID)
         }
     }
 

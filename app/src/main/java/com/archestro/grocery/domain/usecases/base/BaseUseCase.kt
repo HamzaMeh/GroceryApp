@@ -34,7 +34,7 @@ abstract class BaseUseCase<Response>(private val apiErrorHandle: ApiErrorHandle?
                 backgroundJob.await().let {
                     if (showApiError && it is BaseResponse<*>) {
                         if ((it as BaseResponse<*>).responseCode == Constants.SUCCESS_CODE) {
-                            resultLiveData.value = Outcome.Success<List<Response>>(it)
+                            resultLiveData.value = Outcome.Success(it)
                         } else {
                             resultLiveData.value =
                                 Outcome.Error(

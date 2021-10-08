@@ -13,6 +13,7 @@
         android:minHeight="?listPreferredItemHeightLarge"
         app:strokeColor="@color/black"
         app:strokeWidth="@dimen/_1sdp"
+        android:id="@+id/productCard"
         android:layout_margin="4dp"
         app:cardCornerRadius="10dp">
 

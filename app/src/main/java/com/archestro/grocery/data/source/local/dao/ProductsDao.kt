@@ -19,5 +19,8 @@ interface ProductsDao {
     @Query("select * from products where category= :categoryToGet ")
     fun getCategoryProducts(categoryToGet:String): LiveData<List<Product>>
 
+    @Query("select * from products where id=:productID")
+    fun getProductDetail(productID:Int):LiveData<List<Product>>
+
 
 }

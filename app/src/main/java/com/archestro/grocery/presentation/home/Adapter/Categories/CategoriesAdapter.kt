@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import com.archestro.grocery.R
 import com.archestro.grocery.base.BaseAdapter
 import com.archestro.grocery.data.source.remote.model.response.category.Category
 import com.archestro.grocery.databinding.FragmentCategoriesItemBinding
 import com.archestro.grocery.internal.GlideApp
+import com.archestro.grocery.presentation.home.HomeFragmentDirections
 
 
 class CategoriesAdapter(): BaseAdapter<Category>(
@@ -43,6 +45,11 @@ class CategoriesAdapter(): BaseAdapter<Category>(
                     .error(R.drawable.ic_baseline_error_24)
                     .into(binding.categoryImage)
 
+                binding.categoryItem.setOnClickListener {
+                    val action=HomeFragmentDirections.actionHomeFragmentToCategoryFragment(item.name)
+                    it.findNavController().navigate(action)
+
+                }
             }
         }
     }
