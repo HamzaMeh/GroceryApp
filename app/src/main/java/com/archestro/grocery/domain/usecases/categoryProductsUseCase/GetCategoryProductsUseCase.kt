@@ -11,7 +11,7 @@ class GetCategoryProductsUseCase(
     apiErrorHandle: ApiErrorHandle
 ) : BaseUseCase<Product>(apiErrorHandle){
 
-    override suspend fun run(category: Any?): LiveData<List<Product>> {
+    override suspend fun run(category: Any?): List<Product> {
         return repository.getCategoryProducts(category = category as String)
     }
 }

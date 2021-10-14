@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.archestro.grocery.data.source.remote.model.ErrorModel
 
 interface UseCaseResponse<Type> {
-    fun onSuccess(result: LiveData<List<Type>>)
+    fun onSuccess(result: List<Type>)
 
     fun onError(errorModel: ErrorModel?)
 }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.archestro.grocery.R
 import com.archestro.grocery.base.BaseViewModel
@@ -24,6 +25,9 @@ class HomeFragment : ScopeFragment() {
     private val homeViewModel:HomeViewModel by viewModel()
     private var _binding: HomeFragmentBinding? = null
     private val binding get() = _binding!!
+    private var categoriesList:List<Category>?=null
+    private var productList:List<Product>?=null
+
 
 
     override fun onCreateView(
@@ -37,25 +41,20 @@ class HomeFragment : ScopeFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (activity as? AppCompatActivity)?.supportActionBar?.title=getString(R.string.Home)
-
         bindUI()
-
     }
 
     private fun bindUI()=launch(Dispatchers.Main) {
-        val categoriesList=homeViewModel.categoryLiveData()
-        categoriesList?.observe(viewLifecycleOwner, Observer { entries->
-            if(entries==null) return@Observer
 
+        homeViewModel.categoryLiveData.observe(viewLifecycleOwner, Observer {
+            if(it.isEmpty()) return@Observer
             binding.groupLoading.visibility= View.GONE
-            categoriesList.value?.let { initCategoryRecyclerView(it) }
+            initCategoryRecyclerView(it)
         })
-        val productsList=homeViewModel.productLiveData()
-        productsList?.observe(viewLifecycleOwner, Observer { entries->
-            if(entries==null) return@Observer
-
-            binding.groupLoading.visibility= View.GONE
-            productsList.value?.let { initProductsRecyclerView(it) }
+        homeViewModel.productLiveData.observe(viewLifecycleOwner, Observer {
+            if(it.isEmpty()) return@Observer
+            binding.groupLoading.visibility=View.GONE
+            initProductsRecyclerView(it)
         })
     }
 
@@ -65,14 +64,14 @@ class HomeFragment : ScopeFragment() {
         val adapter= CategoriesAdapter()
         adapter.submitList(items)
         binding.categoryRecycler.layoutManager= GridLayoutManager(context,1, GridLayoutManager.HORIZONTAL,false)
-
         binding.categoryRecycler.adapter=adapter
-
-
     }
     private fun initProductsRecyclerView(items: List<Product>)
     {
-        val adapter= ProductsAdapter()
+        val adapter= ProductsAdapter(){product->
+            val action=HomeFragmentDirections.actionHomeFragmentToProductDetail(product.id)
+            findNavController().navigate(action)
+        }
         adapter.submitList(items)
         binding.productRecycler.layoutManager=GridLayoutManager(context,3)
         binding.productRecycler.adapter=adapter

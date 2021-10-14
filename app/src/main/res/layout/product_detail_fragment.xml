@@ -123,6 +123,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/productDescription"
                         app:layout_constraintTop_toBottomOf="@id/productPrice"
+
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="4dp"
                         android:layout_marginLeft="4dp"
@@ -133,6 +134,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/addToCart"
                 android:text="@string/add_to_cart"
                 android:drawableLeft="@drawable/ic_baseline_shopping_cart_24"
                 android:drawableTint="@color/white"

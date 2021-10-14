@@ -1,6 +1,7 @@
 package com.archestro.grocery.presentation.home.Adapter.Product
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -14,9 +15,12 @@ import com.archestro.grocery.internal.GlideApp
 import com.archestro.grocery.presentation.home.HomeFragmentDirections
 
 
-class ProductsAdapter(): BaseAdapter<Product>(
+class ProductsAdapter(private val onClickListener: (product: Product) -> Unit): BaseAdapter<Product>(
+
+
     diffCallback = object : DiffUtil.ItemCallback<Product>()
     {
+
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             TODO("Not yet implemented")
         }
@@ -47,10 +51,13 @@ class ProductsAdapter(): BaseAdapter<Product>(
                     .error(R.drawable.ic_baseline_error_24)
                     .into(binding.ProductImage)
 
-                binding.productCard.setOnClickListener{
+               /* binding.productCard.setOnClickListener{
                     val action=HomeFragmentDirections.actionHomeFragmentToProductDetail(item.id)
                     it.findNavController().navigate(action)
                 }
+                */
+                binding.productCard.setOnClickListener { onClickListener.invoke(item) }
+
             }
         }
     }

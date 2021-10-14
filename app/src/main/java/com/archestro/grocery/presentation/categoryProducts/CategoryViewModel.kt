@@ -20,9 +20,10 @@ class CategoryViewModel(
         getcategoryProducts()
     }
 
-    private var categoryProducts: LiveData<List<Product>>?=null
+    private val categoryProducts= MutableLiveData<List<Product>>()
 
-    fun categoryProductLiveData() = categoryProducts
+    val categoryProductData:LiveData<List<Product>>
+        get() = categoryProducts
 
     private fun getcategoryProducts() {
         outcomeLiveData.value = Outcome.Start<Any>()
@@ -30,11 +31,10 @@ class CategoryViewModel(
             scope = scope,
             _category,
             onResult = object : UseCaseResponse<Product> {
-                override fun onSuccess(result: LiveData<List<Product>>) {
+                override fun onSuccess(result: List<Product>) {
                     outcomeLiveData.value = Outcome.End<Any>()
-                    result.let {
-                        categoryProducts=result
-                    }
+                    categoryProducts?.value=result
+
                 }
 
                 override fun onError(errorModel: ErrorModel?) {

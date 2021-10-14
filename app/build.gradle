@@ -26,7 +26,7 @@ android {
     buildTypes {
         debug{
             buildConfigField 'Boolean', 'IS_DEBUG', 'true'
-            buildConfigField 'String', 'BASE_URL', '"http://10.100.104.196:1024/api/"'
+            buildConfigField 'String', 'BASE_URL', '"http://192.168.100.26:1024/api/"'
         }
 
         release {

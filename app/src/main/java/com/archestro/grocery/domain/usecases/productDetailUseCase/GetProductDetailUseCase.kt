@@ -10,8 +10,8 @@ class GetProductDetailUseCase(
     private val repository: GroceryRepository,
      apiErrorHandle: ApiErrorHandle
 ):BaseUseCase<Product>(apiErrorHandle) {
-    override suspend fun run(paramter: Any?): LiveData<List<Product>> {
-        return repository.getProductDetail(paramter as Int)
+    override suspend fun run(paramter: Any?):List<Product> {
+        return repository.getProductDetail(productID = paramter as Int)
     }
 
 }

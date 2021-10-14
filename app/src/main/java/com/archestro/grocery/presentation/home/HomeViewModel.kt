@@ -24,11 +24,15 @@ class HomeViewModel(
         getAllProducts()
     }
 
-    private var category: LiveData<List<Category>>?=null
-    private var product: LiveData<List<Product>>? = null
+    private val category= MutableLiveData<List<Category>>()
+    private  val product= MutableLiveData<List<Product>>()
 
-    fun categoryLiveData() = category
-    fun productLiveData() = product
+    val categoryLiveData:LiveData<List<Category>>
+        get() = category
+
+    val productLiveData:LiveData<List<Product>>
+        get() = product
+
 
 
     private fun getAllCategories() {
@@ -37,11 +41,10 @@ class HomeViewModel(
             scope = scope,
             null,
             onResult = object : UseCaseResponse<Category> {
-                override fun onSuccess(result: LiveData<List<Category>>) {
+                override fun onSuccess(result: List<Category>) {
                     outcomeLiveData.value = Outcome.End<Any>()
-                    result.let {
-                        category=result
-                    }
+                    category?.value=result
+
                 }
 
                 override fun onError(errorModel: ErrorModel?) {
@@ -56,11 +59,9 @@ class HomeViewModel(
             scope = scope,
             null,
             onResult = object : UseCaseResponse<Product> {
-                override fun onSuccess(result: LiveData<List<Product>>) {
+                override fun onSuccess(result: List<Product>) {
                     outcomeLiveData.value = Outcome.End<Any>()
-                    result.let {
-                        product = result
-                    }
+                    product?.value=result
                 }
 
                 override fun onError(errorModel: ErrorModel?) {

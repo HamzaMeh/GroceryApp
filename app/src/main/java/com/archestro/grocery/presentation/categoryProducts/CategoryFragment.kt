@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.archestro.grocery.R
@@ -16,6 +17,7 @@ import com.archestro.grocery.base.ScopeFragment
 import com.archestro.grocery.data.source.remote.model.response.product.Product
 import com.archestro.grocery.databinding.CategoryFragmentBinding
 import com.archestro.grocery.presentation.home.Adapter.Product.ProductsAdapter
+import com.archestro.grocery.presentation.home.HomeFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -49,18 +51,19 @@ class CategoryFragment : ScopeFragment() {
     private fun bindUI()=launch(Dispatchers.Main){
 
         binding.textViewCategoryName.text=args.category
-        val productsList=viewModel.categoryProductLiveData()
-        productsList?.observe(viewLifecycleOwner, Observer { entries->
-            if(entries==null) return@Observer
-
+        viewModel.categoryProductData.observe(viewLifecycleOwner, Observer {
+            if(it==null) return@Observer
             binding.groupLoading.visibility= View.GONE
-            productsList.value?.let { initProductsRecyclerView(it) }
+            initProductsRecyclerView(it)
         })
     }
 
     private fun initProductsRecyclerView(items: List<Product>)
     {
-        val adapter= ProductsAdapter()
+        val adapter= ProductsAdapter(){product->
+            val action= CategoryFragmentDirections.actionCategoryFragmentToProductDetail(product.id)
+            findNavController().navigate(action)
+        }
         adapter.submitList(items)
         binding.categoryProductRecycler.layoutManager= GridLayoutManager(context,3)
         binding.categoryProductRecycler.adapter=adapter

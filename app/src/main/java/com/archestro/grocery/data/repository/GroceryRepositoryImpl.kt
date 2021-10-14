@@ -1,6 +1,8 @@
 package com.archestro.grocery.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.archestro.grocery.data.source.local.dao.CategoriesDao
 import com.archestro.grocery.data.source.local.dao.ProductsDao
 import com.archestro.grocery.data.source.remote.NetworkDataSource
@@ -9,6 +11,7 @@ import com.archestro.grocery.data.source.remote.model.response.product.Product
 import com.archestro.grocery.domain.repository.GroceryRepository
 import kotlinx.coroutines.*
 import java.time.ZonedDateTime
+import kotlin.math.log
 
 
 class GroceryRepositoryImpl(
@@ -17,18 +20,17 @@ class GroceryRepositoryImpl(
     private val networkDataSource: NetworkDataSource
 ) : GroceryRepository {
 
-    private val categoryList= mutableListOf<Category>()
     init {
 
         networkDataSource.apply {
 
             downloadAllCategories.observeForever{newFetchedCategory->
-                newFetchedCategory.map { it->
+                newFetchedCategory.map {
                     persistFetchedCategories(it)
                 }
             }
             downloadAllProducts.observeForever(){newFetchedProduct->
-                newFetchedProduct.map { it->
+                newFetchedProduct.map {
                     persistFetchedProducts(it)
                 }
             }
@@ -36,37 +38,51 @@ class GroceryRepositoryImpl(
     }
 
 
-    override suspend fun getAllProducts():LiveData<List<Product>> {
-
+    override suspend fun getAllProducts():List<Product> {
         return withContext(Dispatchers.IO){
-           fetchProducts()
-            return@withContext productsDao.getAllProducts()
+            val data=productsDao.getAllProducts()
+            if(data.isEmpty())
+            {
+                networkDataSource.fetchAllProducts()
+                return@withContext productsDao.getAllProducts()
+            }
+            else{
+                return@withContext data
+            }
         }
     }
 
-    override suspend fun getAllCategories(): LiveData<List<Category>> {
+    override suspend fun getAllCategories(): List<Category> {
+        return withContext(Dispatchers.IO){
+            val data=categoriesDao.getAllCategories()
+            if(data.isEmpty())
+            {
+                networkDataSource.fetchAllCategories()
+                return@withContext categoriesDao.getAllCategories()
+            }
+            else{
+                return@withContext data
+            }
 
 
-        return withContext(Dispatchers.IO) {
-            fetchCategories()
-            return@withContext categoriesDao.getAllCategories()
         }
     }
 
-    override suspend fun getCategoryProducts(category:String): LiveData<List<Product>> {
 
+    override suspend fun getCategoryProducts(category:String): List<Product> {
         return withContext(Dispatchers.IO){
-         //   initGrocery()
             return@withContext productsDao.getCategoryProducts(category)
         }
     }
 
-    override suspend fun getProductDetail(productID:Int):LiveData<List<Product>>{
-        val result=productsDao.getProductDetail(productID)
+    override suspend fun getProductDetail(productID:Int):List<Product>{
+
         return withContext(Dispatchers.IO){
-            return@withContext productsDao.getProductDetail(productID)
+            val prod=productsDao.getProductDetail(productID)
+            return@withContext listOf(prod)
         }
     }
+
 
     private fun persistFetchedCategories(fetchedCategories:Category)
     {
@@ -84,39 +100,6 @@ class GroceryRepositoryImpl(
         }
     }
 
-    private suspend fun getCategory(): MutableList<Category> {
 
-        if(categoryList.isEmpty())
-        {
-            networkDataSource.fetchAllCategories()
-        }
-        return categoryList
-    }
-
-    private suspend fun initGrocery()
-    {
-        val categories=categoriesDao.getAllCategories()
-    //    if(categories.isEmpty()){
-            fetchCategories()
-          //  fetchProducts()
-            return
-      //  }
-
-    }
-
-    private suspend fun fetchCategories()
-    {
-        networkDataSource.fetchAllCategories()
-    }
-
-    private suspend fun fetchProducts()
-    {
-        networkDataSource.fetchAllProducts()
-    }
-
-    private fun isFetchNeeded(lastFetchedTime: ZonedDateTime):Boolean{
-        val thirtyMinutesAgo= ZonedDateTime.now().minusMinutes(30)
-        return lastFetchedTime.isBefore(thirtyMinutesAgo)
-    }
 
 }

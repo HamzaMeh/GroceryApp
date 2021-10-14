@@ -46,19 +46,19 @@ class ProductDetail : ScopeFragment() {
     }
 
     private fun bindUI()=launch {
-        val productDetail=viewModel.ProductDetailLiveData()
-        productDetail?.observe(viewLifecycleOwner,Observer{entries->
-            if(entries==null) return@Observer
+
+        viewModel.productDetailLiveData.observe(viewLifecycleOwner, Observer { entry->
+            if(entry==null) return@Observer
 
             binding.groupLoading.visibility=View.GONE
 
-            binding.productTitle.text=productDetail.value?.title
-            binding.productDescription.text=productDetail.value?.description
-            binding.productPrice.text= productDetail.value?.price.toString()
-            binding.textViewRating.text= productDetail.value?.rating?.rate.toString()
+            binding.productTitle.text=entry.title
+            binding.productDescription.text=entry.description
+            binding.productPrice.text= entry.price.toString()
+            binding.textViewRating.text= entry.rating?.rate.toString()
 
             GlideApp.with(binding.root)
-                .load(productDetail.value?.image)
+                .load(entry.image)
                 .error(R.drawable.ic_baseline_error_24)
                 .into(binding.productImage)
         })

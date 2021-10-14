@@ -17,9 +17,9 @@ import java.net.UnknownHostException
 
 abstract class BaseUseCase<Response>(private val apiErrorHandle: ApiErrorHandle? = null) where Response : Any {
 
-    abstract suspend fun run(paramter: Any?): LiveData<List<Response>>
+    abstract suspend fun run(paramter: Any?): List<Response>
 
-    open fun invoke(
+   /* open fun invoke(
         showLoader: Boolean = true,
         showApiError: Boolean = true,
         scope: CoroutineScope,
@@ -58,7 +58,7 @@ abstract class BaseUseCase<Response>(private val apiErrorHandle: ApiErrorHandle?
         }
 
         return resultLiveData
-    }
+    }*/
 
     open fun invoke(
         scope: CoroutineScope,
@@ -74,6 +74,7 @@ abstract class BaseUseCase<Response>(private val apiErrorHandle: ApiErrorHandle?
                     onResult.onSuccess(it)
                 }
             } catch (ex: Exception) {
+                ex.printStackTrace()
                 onResult.onError(apiErrorHandle?.traceErrorException(ex))
             }
         }

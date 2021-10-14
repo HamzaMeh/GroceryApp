@@ -18,9 +18,10 @@ class ProductDetailViewModel(
         getProductDetail()
     }
 
-    private var productDetail: MutableLiveData<Product>?=null
+    private val productDetail= MutableLiveData<Product>()
 
-    fun ProductDetailLiveData()=productDetail
+    val productDetailLiveData:LiveData<Product>
+        get() = productDetail
 
     private fun getProductDetail(){
         outcomeLiveData.value=Outcome.Start<Any>()
@@ -28,10 +29,10 @@ class ProductDetailViewModel(
             scope = scope,
             productId,
             onResult = object : UseCaseResponse<Product> {
-                override fun onSuccess(result: LiveData<List<Product>>) {
+                override fun onSuccess(result: List<Product>) {
                     outcomeLiveData.value = Outcome.End<Any>()
                     result.let {
-                        productDetail?.value= result.value?.get(0)
+                        productDetail?.value=result[0]
                     }
                 }
 
