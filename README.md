@@ -9,3 +9,4 @@ Code Features:
 * Base Classes
 * Use Cases
 * Data Binding
+* Koin Dependency Injection
